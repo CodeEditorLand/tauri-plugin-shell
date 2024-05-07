@@ -95,7 +95,7 @@ async function execute(onEventHandler, program, args = [], options) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class EventEmitter {
     constructor() {
-        /** @ignore */
+        
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
         this.eventListeners = Object.create(null);
     }
@@ -435,7 +435,7 @@ class Command extends EventEmitter {
             this.spawn().catch(reject);
         });
     }
-    /** @ignore */
+    
     collectOutput(events) {
         if (this.options.encoding === "raw") {
             return events.reduce((p, c) => {
