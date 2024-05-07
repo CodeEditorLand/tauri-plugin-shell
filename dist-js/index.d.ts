@@ -30,7 +30,7 @@ interface ChildProcess<O extends IOPayload> {
  * @since 2.0.0
  */
 declare class EventEmitter<E extends Record<string, any>> {
-    /** @ignore */
+    
     private eventListeners;
     /**
      * Alias for `emitter.on(eventName, listener)`.
@@ -179,11 +179,11 @@ interface OutputEvents<O extends IOPayload> {
  *
  */
 declare class Command<O extends IOPayload> extends EventEmitter<CommandEvents> {
-    /** @ignore Program to execute. */
+    
     private readonly program;
-    /** @ignore Program arguments */
+    
     private readonly args;
-    /** @ignore Spawn options. */
+    
     private readonly options;
     /** Event emitter for the `stdout`. Emits the `data` event. */
     readonly stdout: EventEmitter<OutputEvents<O>>;
@@ -234,7 +234,7 @@ declare class Command<O extends IOPayload> extends EventEmitter<CommandEvents> {
      * @since 2.0.0
      */
     execute(): Promise<ChildProcess<O>>;
-    /** @ignore */
+    
     private collectOutput;
 }
 /**
