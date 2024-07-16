@@ -34,7 +34,7 @@ import { invoke, Channel } from '@tauri-apps/api/core';
  *
  * #### Example scope configuration
  *
- * CLI: `git commit -m "the commit message"`
+ * CLI: `git ecommit -m "the commit message"`
  *
  * Configuration:
  * ```json
