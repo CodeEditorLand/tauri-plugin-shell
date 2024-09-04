@@ -141,35 +141,35 @@ declare class EventEmitter<E extends Record<string, any>> {
  * @since 2.0.0
  */
 declare class Child {
-	/** The child process `pid`. */
-	pid: number;
-	constructor(pid: number);
-	/**
-	 * Writes `data` to the `stdin`.
-	 *
-	 * @param data The message to write, either a string or a byte array.
-	 * @example
-	 * ```typescript
-	 * import { Command } from '@tauri-apps/plugin-shell';
-	 * const command = Command.create('node');
-	 * const child = await command.spawn();
-	 * await child.write('message');
-	 * await child.write([0, 1, 2, 3, 4, 5]);
-	 * ```
-	 *
-	 * @returns A promise indicating the success or failure of the operation.
-	 *
-	 * @since 2.0.0
-	 */
-	write(data: IOPayload): Promise<void>;
-	/**
-	 * Kills the child process.
-	 *
-	 * @returns A promise indicating the success or failure of the operation.
-	 *
-	 * @since 2.0.0
-	 */
-	kill(): Promise<void>;
+    /** The child process `pid`. */
+    pid: number;
+    constructor(pid: number);
+    /**
+     * Writes `data` to the `stdin`.
+     *
+     * @param data The message to write, either a string or a byte array.
+     * @example
+     * ```typescript
+     * import { Command } from '@tauri-apps/plugin-shell';
+     * const command = Command.create('node');
+     * const child = await command.spawn();
+     * await child.write('message');
+     * await child.write([0, 1, 2, 3, 4, 5]);
+     * ```
+     *
+     * @returns A promise indicating the success or failure of the operation.
+     *
+     * @since 2.0.0
+     */
+    write(data: IOPayload | number[]): Promise<void>;
+    /**
+     * Kills the child process.
+     *
+     * @returns A promise indicating the success or failure of the operation.
+     *
+     * @since 2.0.0
+     */
+    kill(): Promise<void>;
 }
 interface CommandEvents {
 	close: TerminatedPayload;
@@ -200,77 +200,61 @@ interface OutputEvents<O extends IOPayload> {
  *
  */
 declare class Command<O extends IOPayload> extends EventEmitter<CommandEvents> {
-	/** @ignore Program to execute. */
-	private readonly program;
-	/** @ignore Program arguments */
-	private readonly args;
-	/** @ignore Spawn options. */
-	private readonly options;
-	/** Event emitter for the `stdout`. Emits the `data` event. */
-	readonly stdout: EventEmitter<OutputEvents<O>>;
-	/** Event emitter for the `stderr`. Emits the `data` event. */
-	readonly stderr: EventEmitter<OutputEvents<O>>;
-	/**
-	 * @ignore
-	 * Creates a new `Command` instance.
-	 *
-	 * @param program The program name to execute.
-	 * It must be configured on `tauri.conf.json > plugins > shell > scope`.
-	 * @param args Program arguments.
-	 * @param options Spawn options.
-	 */
-	private constructor();
-	static create(program: string, args?: string | string[]): Command<string>;
-	static create(
-		program: string,
-		args?: string | string[],
-		options?: SpawnOptions & {
-			encoding: "raw";
-		},
-	): Command<Uint8Array>;
-	static create(
-		program: string,
-		args?: string | string[],
-		options?: SpawnOptions,
-	): Command<string>;
-	static sidecar(program: string, args?: string | string[]): Command<string>;
-	static sidecar(
-		program: string,
-		args?: string | string[],
-		options?: SpawnOptions & {
-			encoding: "raw";
-		},
-	): Command<Uint8Array>;
-	static sidecar(
-		program: string,
-		args?: string | string[],
-		options?: SpawnOptions,
-	): Command<string>;
-	/**
-	 * Executes the command as a child process, returning a handle to it.
-	 *
-	 * @returns A promise resolving to the child process handle.
-	 *
-	 * @since 2.0.0
-	 */
-	spawn(): Promise<Child>;
-	/**
-	 * Executes the command as a child process, waiting for it to finish and collecting all of its output.
-	 * @example
-	 * ```typescript
-	 * import { Command } from '@tauri-apps/plugin-shell';
-	 * const output = await Command.create('echo', 'message').execute();
-	 * assert(output.code === 0);
-	 * assert(output.signal === null);
-	 * assert(output.stdout === 'message');
-	 * assert(output.stderr === '');
-	 * ```
-	 *
-	 * @returns A promise resolving to the child process output.
-	 *
-	 * @since 2.0.0
-	 */
-	execute(): Promise<ChildProcess<O>>;
+    /** @ignore Program to execute. */
+    private readonly program;
+    /** @ignore Program arguments */
+    private readonly args;
+    /** @ignore Spawn options. */
+    private readonly options;
+    /** Event emitter for the `stdout`. Emits the `data` event. */
+    readonly stdout: EventEmitter<OutputEvents<O>>;
+    /** Event emitter for the `stderr`. Emits the `data` event. */
+    readonly stderr: EventEmitter<OutputEvents<O>>;
+    /**
+     * @ignore
+     * Creates a new `Command` instance.
+     *
+     * @param program The program name to execute.
+     * It must be configured on `tauri.conf.json > plugins > shell > scope`.
+     * @param args Program arguments.
+     * @param options Spawn options.
+     */
+    private constructor();
+    static create(program: string, args?: string | string[]): Command<string>;
+    static create(program: string, args?: string | string[], options?: SpawnOptions & {
+        encoding: 'raw';
+    }): Command<Uint8Array>;
+    static create(program: string, args?: string | string[], options?: SpawnOptions): Command<string>;
+    static sidecar(program: string, args?: string | string[]): Command<string>;
+    static sidecar(program: string, args?: string | string[], options?: SpawnOptions & {
+        encoding: 'raw';
+    }): Command<Uint8Array>;
+    static sidecar(program: string, args?: string | string[], options?: SpawnOptions): Command<string>;
+    /**
+     * Executes the command as a child process, returning a handle to it.
+     *
+     * @returns A promise resolving to the child process handle.
+     *
+     * @since 2.0.0
+     */
+    spawn(): Promise<Child>;
+    /**
+     * Executes the command as a child process, waiting for it to finish and collecting all of its output.
+     * @example
+     * ```typescript
+     * import { Command } from '@tauri-apps/plugin-shell';
+     * const output = await Command.create('echo', 'message').execute();
+     * assert(output.code === 0);
+     * assert(output.signal === null);
+     * assert(output.stdout === 'message');
+     * assert(output.stderr === '');
+     * ```
+     *
+     * @returns A promise resolving to the child process output.
+     *
+     * @since 2.0.0
+     */
+    execute(): Promise<ChildProcess<O>>;
 }
 /**
  * Payload for the `Terminated` command event.
@@ -311,11 +295,4 @@ type IOPayload = string | Uint8Array;
  */
 declare function open(path: string, openWith?: string): Promise<void>;
 export { Command, Child, EventEmitter, open };
-export type {
-	IOPayload,
-	CommandEvents,
-	TerminatedPayload,
-	OutputEvents,
-	ChildProcess,
-	SpawnOptions,
-};
+export type { IOPayload, CommandEvents, TerminatedPayload, OutputEvents, ChildProcess, SpawnOptions };
