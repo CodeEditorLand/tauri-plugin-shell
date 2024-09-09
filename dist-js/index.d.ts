@@ -2,140 +2,119 @@
  * @since 2.0.0
  */
 interface SpawnOptions {
-	/** Current working directory. */
-	cwd?: string;
-	/** Environment variables. set to `null` to clear the process env. */
-	env?: Record<string, string>;
-	/**
-	 * Character encoding for stdout/stderr
-	 *
-	 * @since 2.0.0
-	 *  */
-	encoding?: string;
+    /** Current working directory. */
+    cwd?: string;
+    /** Environment variables. set to `null` to clear the process env. */
+    env?: Record<string, string>;
+    /**
+     * Character encoding for stdout/stderr
+     *
+     * @since 2.0.0
+     *  */
+    encoding?: string;
 }
 /**
  * @since 2.0.0
  */
 interface ChildProcess<O extends IOPayload> {
-	/** Exit code of the process. `null` if the process was terminated by a signal on Unix. */
-	code: number | null;
-	/** If the process was terminated by a signal, represents that signal. */
-	signal: number | null;
-	/** The data that the process wrote to `stdout`. */
-	stdout: O;
-	/** The data that the process wrote to `stderr`. */
-	stderr: O;
+    /** Exit code of the process. `null` if the process was terminated by a signal on Unix. */
+    code: number | null;
+    /** If the process was terminated by a signal, represents that signal. */
+    signal: number | null;
+    /** The data that the process wrote to `stdout`. */
+    stdout: O;
+    /** The data that the process wrote to `stderr`. */
+    stderr: O;
 }
 /**
  * @since 2.0.0
  */
 declare class EventEmitter<E extends Record<string, any>> {
-	/** @ignore */
-	private eventListeners;
-	/**
-	 * Alias for `emitter.on(eventName, listener)`.
-	 *
-	 * @since 2.0.0
-	 */
-	addListener<N extends keyof E>(
-		eventName: N,
-		listener: (arg: E[typeof eventName]) => void,
-	): this;
-	/**
-	 * Alias for `emitter.off(eventName, listener)`.
-	 *
-	 * @since 2.0.0
-	 */
-	removeListener<N extends keyof E>(
-		eventName: N,
-		listener: (arg: E[typeof eventName]) => void,
-	): this;
-	/**
-	 * Adds the `listener` function to the end of the listeners array for the
-	 * event named `eventName`. No checks are made to see if the `listener` has
-	 * already been added. Multiple calls passing the same combination of `eventName`and `listener` will result in the `listener` being added, and called, multiple
-	 * times.
-	 *
-	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
-	 *
-	 * @since 2.0.0
-	 */
-	on<N extends keyof E>(
-		eventName: N,
-		listener: (arg: E[typeof eventName]) => void,
-	): this;
-	/**
-	 * Adds a **one-time**`listener` function for the event named `eventName`. The
-	 * next time `eventName` is triggered, this listener is removed and then invoked.
-	 *
-	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
-	 *
-	 * @since 2.0.0
-	 */
-	once<N extends keyof E>(
-		eventName: N,
-		listener: (arg: E[typeof eventName]) => void,
-	): this;
-	/**
-	 * Removes the all specified listener from the listener array for the event eventName
-	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
-	 *
-	 * @since 2.0.0
-	 */
-	off<N extends keyof E>(
-		eventName: N,
-		listener: (arg: E[typeof eventName]) => void,
-	): this;
-	/**
-	 * Removes all listeners, or those of the specified eventName.
-	 *
-	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
-	 *
-	 * @since 2.0.0
-	 */
-	removeAllListeners<N extends keyof E>(event?: N): this;
-	/**
-	 * @ignore
-	 * Synchronously calls each of the listeners registered for the event named`eventName`, in the order they were registered, passing the supplied arguments
-	 * to each.
-	 *
-	 * @returns `true` if the event had listeners, `false` otherwise.
-	 *
-	 * @since 2.0.0
-	 */
-	emit<N extends keyof E>(eventName: N, arg: E[typeof eventName]): boolean;
-	/**
-	 * Returns the number of listeners listening to the event named `eventName`.
-	 *
-	 * @since 2.0.0
-	 */
-	listenerCount<N extends keyof E>(eventName: N): number;
-	/**
-	 * Adds the `listener` function to the _beginning_ of the listeners array for the
-	 * event named `eventName`. No checks are made to see if the `listener` has
-	 * already been added. Multiple calls passing the same combination of `eventName`and `listener` will result in the `listener` being added, and called, multiple
-	 * times.
-	 *
-	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
-	 *
-	 * @since 2.0.0
-	 */
-	prependListener<N extends keyof E>(
-		eventName: N,
-		listener: (arg: E[typeof eventName]) => void,
-	): this;
-	/**
-	 * Adds a **one-time**`listener` function for the event named `eventName` to the_beginning_ of the listeners array. The next time `eventName` is triggered, this
-	 * listener is removed, and then invoked.
-	 *
-	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
-	 *
-	 * @since 2.0.0
-	 */
-	prependOnceListener<N extends keyof E>(
-		eventName: N,
-		listener: (arg: E[typeof eventName]) => void,
-	): this;
+    /** @ignore */
+    private eventListeners;
+    /**
+     * Alias for `emitter.on(eventName, listener)`.
+     *
+     * @since 2.0.0
+     */
+    addListener<N extends keyof E>(eventName: N, listener: (arg: E[typeof eventName]) => void): this;
+    /**
+     * Alias for `emitter.off(eventName, listener)`.
+     *
+     * @since 2.0.0
+     */
+    removeListener<N extends keyof E>(eventName: N, listener: (arg: E[typeof eventName]) => void): this;
+    /**
+     * Adds the `listener` function to the end of the listeners array for the
+     * event named `eventName`. No checks are made to see if the `listener` has
+     * already been added. Multiple calls passing the same combination of `eventName`and `listener` will result in the `listener` being added, and called, multiple
+     * times.
+     *
+     * Returns a reference to the `EventEmitter`, so that calls can be chained.
+     *
+     * @since 2.0.0
+     */
+    on<N extends keyof E>(eventName: N, listener: (arg: E[typeof eventName]) => void): this;
+    /**
+     * Adds a **one-time**`listener` function for the event named `eventName`. The
+     * next time `eventName` is triggered, this listener is removed and then invoked.
+     *
+     * Returns a reference to the `EventEmitter`, so that calls can be chained.
+     *
+     * @since 2.0.0
+     */
+    once<N extends keyof E>(eventName: N, listener: (arg: E[typeof eventName]) => void): this;
+    /**
+     * Removes the all specified listener from the listener array for the event eventName
+     * Returns a reference to the `EventEmitter`, so that calls can be chained.
+     *
+     * @since 2.0.0
+     */
+    off<N extends keyof E>(eventName: N, listener: (arg: E[typeof eventName]) => void): this;
+    /**
+     * Removes all listeners, or those of the specified eventName.
+     *
+     * Returns a reference to the `EventEmitter`, so that calls can be chained.
+     *
+     * @since 2.0.0
+     */
+    removeAllListeners<N extends keyof E>(event?: N): this;
+    /**
+     * @ignore
+     * Synchronously calls each of the listeners registered for the event named`eventName`, in the order they were registered, passing the supplied arguments
+     * to each.
+     *
+     * @returns `true` if the event had listeners, `false` otherwise.
+     *
+     * @since 2.0.0
+     */
+    emit<N extends keyof E>(eventName: N, arg: E[typeof eventName]): boolean;
+    /**
+     * Returns the number of listeners listening to the event named `eventName`.
+     *
+     * @since 2.0.0
+     */
+    listenerCount<N extends keyof E>(eventName: N): number;
+    /**
+     * Adds the `listener` function to the _beginning_ of the listeners array for the
+     * event named `eventName`. No checks are made to see if the `listener` has
+     * already been added. Multiple calls passing the same combination of `eventName`and `listener` will result in the `listener` being added, and called, multiple
+     * times.
+     *
+     * Returns a reference to the `EventEmitter`, so that calls can be chained.
+     *
+     * @since 2.0.0
+     */
+    prependListener<N extends keyof E>(eventName: N, listener: (arg: E[typeof eventName]) => void): this;
+    /**
+     * Adds a **one-time**`listener` function for the event named `eventName` to the_beginning_ of the listeners array. The next time `eventName` is triggered, this
+     * listener is removed, and then invoked.
+     *
+     * Returns a reference to the `EventEmitter`, so that calls can be chained.
+     *
+     * @since 2.0.0
+     */
+    prependOnceListener<N extends keyof E>(eventName: N, listener: (arg: E[typeof eventName]) => void): this;
 }
 /**
  * @since 2.0.0
@@ -172,11 +151,11 @@ declare class Child {
     kill(): Promise<void>;
 }
 interface CommandEvents {
-	close: TerminatedPayload;
-	error: string;
+    close: TerminatedPayload;
+    error: string;
 }
 interface OutputEvents<O extends IOPayload> {
-	data: O;
+    data: O;
 }
 /**
  * The entry point for spawning child processes.
@@ -260,10 +239,10 @@ declare class Command<O extends IOPayload> extends EventEmitter<CommandEvents> {
  * Payload for the `Terminated` command event.
  */
 interface TerminatedPayload {
-	/** Exit code of the process. `null` if the process was terminated by a signal on Unix. */
-	code: number | null;
-	/** If the process was terminated by a signal, represents that signal. */
-	signal: number | null;
+    /** Exit code of the process. `null` if the process was terminated by a signal on Unix. */
+    code: number | null;
+    /** If the process was terminated by a signal, represents that signal. */
+    signal: number | null;
 }
 /** Event payload type */
 type IOPayload = string | Uint8Array;
