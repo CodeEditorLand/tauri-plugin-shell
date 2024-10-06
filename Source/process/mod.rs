@@ -232,9 +232,7 @@ impl Command {
 	/// 	Ok(())
 	/// });
 	/// ```
-	pub fn spawn(
-		self,
-	) -> crate::Result<(Receiver<CommandEvent>, CommandChild)> {
+	pub fn spawn(self) -> crate::Result<(Receiver<CommandEvent>, CommandChild)> {
 		let raw = self.raw_out;
 		let mut command:StdCommand = self.into();
 		let (stdout_reader, stdout_writer) = pipe()?;
@@ -251,20 +249,8 @@ impl Command {
 
 		let (tx, rx) = channel(1);
 
-		spawn_pipe_reader(
-			tx.clone(),
-			guard.clone(),
-			stdout_reader,
-			CommandEvent::Stdout,
-			raw,
-		);
-		spawn_pipe_reader(
-			tx.clone(),
-			guard.clone(),
-			stderr_reader,
-			CommandEvent::Stderr,
-			raw,
-		);
+		spawn_pipe_reader(tx.clone(), guard.clone(), stdout_reader, CommandEvent::Stdout, raw);
+		spawn_pipe_reader(tx.clone(), guard.clone(), stderr_reader, CommandEvent::Stderr, raw);
 
 		spawn(move || {
 			let _ = match child_.wait() {
@@ -283,9 +269,7 @@ impl Command {
 				},
 				Err(e) => {
 					let _l = guard.write().unwrap();
-					block_on_task(async move {
-						tx.send(CommandEvent::Error(e.to_string())).await
-					})
+					block_on_task(async move { tx.send(CommandEvent::Error(e.to_string())).await })
 				},
 			};
 		});
@@ -376,16 +360,14 @@ fn read_raw_bytes<F:Fn(Vec<u8>) -> CommandEvent + Send + Copy + 'static>(
 					break;
 				}
 				let tx_ = tx.clone();
-				let _ = block_on_task(async move {
-					tx_.send(wrapper(buf.to_vec())).await
-				});
+				let _ = block_on_task(async move { tx_.send(wrapper(buf.to_vec())).await });
 				reader.consume(length);
 			},
 			Err(e) => {
 				let tx_ = tx.clone();
-				let _ = block_on_task(async move {
-					tx_.send(CommandEvent::Error(e.to_string())).await
-				});
+				let _ = block_on_task(
+					async move { tx_.send(CommandEvent::Error(e.to_string())).await },
+				);
 			},
 		}
 	}
@@ -404,14 +386,13 @@ fn read_line<F:Fn(Vec<u8>) -> CommandEvent + Send + Copy + 'static>(
 					break;
 				}
 				let tx_ = tx.clone();
-				let _ =
-					block_on_task(async move { tx_.send(wrapper(buf)).await });
+				let _ = block_on_task(async move { tx_.send(wrapper(buf)).await });
 			},
 			Err(e) => {
 				let tx_ = tx.clone();
-				let _ = block_on_task(async move {
-					tx_.send(CommandEvent::Error(e.to_string())).await
-				});
+				let _ = block_on_task(
+					async move { tx_.send(CommandEvent::Error(e.to_string())).await },
+				);
 				break;
 			},
 		}
@@ -456,10 +437,7 @@ mod tests {
 						assert_eq!(payload.code, Some(0));
 					},
 					CommandEvent::Stdout(line) => {
-						assert_eq!(
-							String::from_utf8(line).unwrap(),
-							"This is a test doc!"
-						);
+						assert_eq!(String::from_utf8(line).unwrap(), "This is a test doc!");
 					},
 					_ => {},
 				}
@@ -480,10 +458,7 @@ mod tests {
 						assert_eq!(payload.code, Some(0));
 					},
 					CommandEvent::Stdout(line) => {
-						assert_eq!(
-							String::from_utf8(line).unwrap(),
-							"This is a test doc!"
-						);
+						assert_eq!(String::from_utf8(line).unwrap(), "This is a test doc!");
 					},
 					_ => {},
 				}
@@ -548,10 +523,7 @@ mod tests {
 		let output = tauri::async_runtime::block_on(cmd.output()).unwrap();
 
 		assert_eq!(String::from_utf8(output.stderr).unwrap(), "");
-		assert_eq!(
-			String::from_utf8(output.stdout).unwrap(),
-			"This is a test doc!\n"
-		);
+		assert_eq!(String::from_utf8(output.stdout).unwrap(), "This is a test doc!\n");
 	}
 
 	#[cfg(not(windows))]
@@ -561,9 +533,6 @@ mod tests {
 		let output = tauri::async_runtime::block_on(cmd.output()).unwrap();
 
 		assert_eq!(String::from_utf8(output.stdout).unwrap(), "");
-		assert_eq!(
-			String::from_utf8(output.stderr).unwrap(),
-			"cat: test/: Is a directory\n\n"
-		);
+		assert_eq!(String::from_utf8(output.stderr).unwrap(), "cat: test/: Is a directory\n\n");
 	}
 }
