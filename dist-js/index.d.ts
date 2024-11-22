@@ -143,6 +143,7 @@ declare class EventEmitter<E extends Record<string, any>> {
 declare class Child {
 	/** The child process `pid`. */
 	pid: number;
+
 	constructor(pid: number);
 	/**
 	 * Writes `data` to the `stdin`.
