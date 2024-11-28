@@ -311,7 +311,9 @@ type IOPayload = string | Uint8Array;
  * @since 2.0.0
  */
 declare function open(path: string, openWith?: string): Promise<void>;
+
 export { Command, Child, EventEmitter, open };
+
 export type {
 	IOPayload,
 	CommandEvents,
