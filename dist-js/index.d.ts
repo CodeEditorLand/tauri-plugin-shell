@@ -174,6 +174,7 @@ declare class Child {
 }
 interface CommandEvents {
 	close: TerminatedPayload;
+
 	error: string;
 }
 interface OutputEvents<O extends IOPayload> {
@@ -221,7 +222,9 @@ declare class Command<O extends IOPayload> extends EventEmitter<CommandEvents> {
 	 * @param options Spawn options.
 	 */
 	private constructor();
+
 	static create(program: string, args?: string | string[]): Command<string>;
+
 	static create(
 		program: string,
 		args?: string | string[],
@@ -229,12 +232,15 @@ declare class Command<O extends IOPayload> extends EventEmitter<CommandEvents> {
 			encoding: "raw";
 		},
 	): Command<Uint8Array>;
+
 	static create(
 		program: string,
 		args?: string | string[],
 		options?: SpawnOptions,
 	): Command<string>;
+
 	static sidecar(program: string, args?: string | string[]): Command<string>;
+
 	static sidecar(
 		program: string,
 		args?: string | string[],
@@ -242,6 +248,7 @@ declare class Command<O extends IOPayload> extends EventEmitter<CommandEvents> {
 			encoding: "raw";
 		},
 	): Command<Uint8Array>;
+
 	static sidecar(
 		program: string,
 		args?: string | string[],
