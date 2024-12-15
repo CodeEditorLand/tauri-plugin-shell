@@ -4,7 +4,7 @@
 
 use std::path::PathBuf;
 
-use serde::{de::Error as DeError, Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, de::Error as DeError};
 
 /// A command allowed to be executed by the webview API.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]

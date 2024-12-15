@@ -20,11 +20,11 @@ const CREATE_NO_WINDOW:u32 = 0x0800_0000;
 const NEWLINE_BYTE:u8 = b'\n';
 
 pub use encoding_rs::Encoding;
-use os_pipe::{pipe, PipeReader, PipeWriter};
+use os_pipe::{PipeReader, PipeWriter, pipe};
 use serde::Serialize;
 use shared_child::SharedChild;
 use tauri::{
-	async_runtime::{block_on as block_on_task, channel, Receiver, Sender},
+	async_runtime::{Receiver, Sender, block_on as block_on_task, channel},
 	utils::platform,
 };
 
@@ -217,7 +217,7 @@ impl Command {
 	/// # Examples
 	///
 	/// ```rust,no_run
-	/// use tauri_plugin_shell::{process::CommandEvent, ShellExt};
+	/// use tauri_plugin_shell::{ShellExt, process::CommandEvent};
 	/// tauri::Builder::default().setup(|app| {
 	/// 	let handle = app.handle().clone();
 	/// 	tauri::async_runtime::spawn(async move {
